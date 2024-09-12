@@ -31,7 +31,8 @@ def check_unit(question, to_check):
                 # return the first item in the mini-list
                 return item[0]
 
-        print("Houston we have a problem...")
+        print("Houston we have a problem..."
+              "that's not a valid unit")
 
 
 def number_checker(question):
@@ -45,10 +46,14 @@ def number_checker(question):
         if response == "xxx":
             return response
 
-        if float(response):
-            return response
+        try:
+            if float(response) > 0:
+                return response
 
-        else:
+            else:
+                print(error)
+
+        except ValueError:
             print(error)
 
 
@@ -152,9 +157,13 @@ while True:
     else:
         domain_check = distance_dict
 
+    # get 'to' unit from user and check that it's valid
+    # ie: it is in the same domain as the 'from' unit
+
     while True:
 
-        domain_ok = "yes"
+        # checks domain, repeats question if it's not OK
+        # domain_ok = "yes"
 
         to_unit = check_unit("Unit that you want to convert to: ", unit_all)
 
@@ -162,19 +171,21 @@ while True:
             break
 
         else:
-            print(f"Oops - {from_unit} is not in the same domain as {to_unit}")
+            print(f"\nOops - {from_unit} is not in the same domain as {to_unit}")
 
-    value = float(number_checker("Value: "))
+    # gets the value of the unit and checks that and is more than zero.
+    value = number_checker("Value: ")
 
     multiplier = domain_check[from_unit]
-    standard = value * multiplier
+    standard = float(value) * multiplier
 
     divide_by = domain_check[to_unit]
     answer = format_number(standard / divide_by)
 
-    print(f"{answer} {to_unit}")
+    print(f"{answer} {to_unit}"
+          f"\nie: {value}{from_unit} is {answer}{to_unit}")
 
     # stop the program if wanted
-    stop = input("Press any key to continue or press <enter> to stop: ")
-    if stop == "":
+    stop = input("\nPress <enter> to continue, or any key to stop: ")
+    if stop != "":
         break
